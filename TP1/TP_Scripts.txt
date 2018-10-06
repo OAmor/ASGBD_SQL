@@ -155,3 +155,34 @@ MODIFY SPECIALITE not null;
 
 /* ======= THIRD PART ======== */
 
+/* 14 */
+UPDATE SERVICE
+SET DIRECTEUR = (
+	SELECT NUM_EMP
+	FROM EMPLOYE
+	WHERE NOM_EMP = 'BOULARAS'
+	AND PRENOM_EMP = 'Fatima')
+WHERE NOM_SERVICE = 'Cardiologie';
+
+/* 15 */
+ALTER TABLE INFIRMIER
+DISABLE CONSTRAINT  CHK_Sallaire;
+
+UPDATE INFIRMIER
+SET SALAIRE = 5000
+WHERE ROTATION = 'JOUR';
+
+ALTER TABLE INFIRMIER
+ENABLE NOVALIDATE CONSTRAINT  CHK_Sallaire;
+
+/* 16 */
+DELETE FROM EMPLOYE E
+WHERE E.NUM_EMP IN (SELECT NUM_EMP
+					FROM MEDECIN M
+					WHERE M.SPECIALITE = 'Cardiologue');
+/* comme num emp est u clé étrangère dans medecin donc on peut pas les supprimes
+
+/* 17 */
+
+/* Aucune idée */					
+					
