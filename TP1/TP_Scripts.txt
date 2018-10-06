@@ -44,7 +44,7 @@ create table INFIRMIER(
 	NUM_INF integer not null,
 	CODE_SERVICE varchar(30),
 	ROTATION varchar(10),
-	SALAIRE float,
+	SALAIRSE float,
 	Constraint pk_inf Primary key(NUM_INF)	
 );
 create table PATIENT (
@@ -184,5 +184,52 @@ WHERE E.NUM_EMP IN (SELECT NUM_EMP
 
 /* 17 */
 
-/* Aucune idée */					
+/* Aucune idée */
+
+/* ======= FOURTH PART ======== */
+
+/* 18 */
+SELECT NOM_PATIENT,PRENOM_PATIENT
+FROM PATIENT
+WHERE MUTUELLE = 'MAAF';
+
+/* 19 */
+
+SELECT h.lit,h.num_chambre,s.nom_service,p.nom_patient,p.prenom_patient,p.mutuelle
+from hospitalisation h,service s,patient p
+where h.code_service = s.code_service
+and s.batiment = 'B'
+and h.num_patient = p.num_patient
+and p.mutuelle LIKE 'MN%';
+
+/* 20 */
+
+/* 21 */
+SELECT CODE_SERVICE,AVG(SALAIRE)
+FROM INFIRMIER
+GROUP BY CODE_SERVICE;
+
+/* 22 */
+create or replace view SERVICE_INFIRMIER(code,nbr_inf) as (
+	select s.code_service,count(*)
+	from service s,infirmier i
+	where s.code_service = i.code_service
+	group by s.code_service
+);
+
+create or replace view SERVICE_PATIENT(code,nbr_pat) as (
+	select s.code_service,count(*)
+	from service s,HOSPITALISATION h
+	where s.code_service = h.code_service
+	group by s.code_service
+)
+SELECT s.code,SUM(nbr_pat)/SUM(nbr_inf)
+FROM SERVICE_INFIRMIER s,SERVICE_PATIENT p
+WHERE s.code = p.code
+GROUP BY s.code;
+
+/* 23 */
+
+
+					
 					
