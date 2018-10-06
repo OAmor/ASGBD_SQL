@@ -230,6 +230,17 @@ GROUP BY s.code;
 
 /* 23 */
 
+select nom_emp,prenom_emp
+from soigne s,employe e
+where s.num_med = e.num_emp
+and not exists (
+		select * 
+		from service ser
+		where not exists(
+				select *
+				from hospitalisation h
+				where h.code_service = ser.code_service
+				and s.num_patient = h.num_patient ));
 
 					
 					
