@@ -1,0 +1,157 @@
+/* == By Amor Oussama == */
+
+/*=========== First Part ========*/
+CREATE TABLESPACE HOPITAL_TBS DATAFILE 'E:\IL\tbs_hopital.dat'  SIZE 100M  AUTOEXTEND ON   ONLINE;
+
+CREATE TEMPORARY TABLESPACE HOPITAL_TempTBS TEMPFILE 'E:\IL\temp_tbs_hopital.dat' SIZE 100M  AUTOEXTEND ON;
+
+Create User DBAHOPITAL Identified by DBAHOPITAL Default Tablespace HOPITAL_TBS  
+            Temporary Tablespace HOPITAL_TempTBS; 
+			
+GRANT ALL privileges to  DBAHOPITAL ; 			
+			
+/*========= Second Part ==========*/
+
+/* 0 */
+create table SERVICE (
+	CODE_SERVICE varchar(10) not null,
+	NOM_SERVICE varchar(30),
+	BATIMENT varchar(2),
+	DIRECTEUR integer,
+	Constraint pk_service Primary key(CODE_SERVICE)	
+);
+create table CHAMBRE(
+	CODE_SERVICE varchar(10) not null,
+	NUM_CHAMBRE integer not null,
+	SURVEILLANT integer,
+	NB_LITS integer,
+	Constraint pk_ch1 Primary key(CODE_SERVICE,NUM_CHAMBRE)	
+);
+create table EMPLOYE(
+	NUM_EMP integer not null,
+	NOM_EMP varchar(30),
+	PRENOM_EMP varchar(30),
+	ADRESSE_EMP varchar(30),
+	TELE_EMP varchar(30),
+	Constraint pk_emp Primary key(NUM_EMP)	
+);
+create table MEDECIN (
+	NUM_MED integer not null,
+	SPECIALITE varchar(30),
+	Constraint pk_med Primary key(NUM_MED)	
+);
+create table INFIRMIER(
+	NUM_INF integer not null,
+	CODE_SERVICE varchar(30),
+	ROTATION varchar(10),
+	SALAIRE float,
+	Constraint pk_inf Primary key(NUM_INF)	
+);
+create table PATIENT (
+	NUM_PATIENT integer not null,
+	NOM_PATIENT varchar(30),
+	PRENOM_PATIENT varchar(30),
+	ADRESSE_PATIENT varchar(30),
+	TELE_PATIENT varchar(30),
+	MUTUELLE varchar(15),
+	Constraint pk_pat Primary key(NUM_PATIENT)	
+);
+create table HOSPITALISATION  (
+	NUM_PATIENT integer not null,
+	CODE_SERVICE varchar(10),
+	NUM_CHAMBRE integer,
+	LIT integer,
+	Constraint pk_hos Primary key(NUM_PATIENT)	
+);
+create table SOIGNE   (
+	NUM_PATIENT integer not null,
+	NUM_MED integer not null,
+	Constraint pk_soigne Primary key(NUM_PATIENT,NUM_MED)	
+);
+
+/* 4+5 */
+ALTER TABLE SERVICE
+ADD CONSTRAINT fk_directeur
+FOREIGN KEY (DIRECTEUR) REFERENCES EMPLOYE(NUM_EMP);
+
+ALTER TABLE CHAMBRE
+ADD CONSTRAINT fk_surv
+FOREIGN KEY (SURVEILLANT) REFERENCES EMPLOYE(NUM_EMP);
+
+ALTER TABLE CHAMBRE
+ADD CONSTRAINT fk_service
+FOREIGN KEY (CODE_SERVICE) REFERENCES SERVICE(CODE_SERVICE);
+
+ALTER TABLE MEDECIN
+ADD CONSTRAINT fk_emp
+FOREIGN KEY (NUM_MED) REFERENCES EMPLOYE(NUM_EMP);
+
+ALTER TABLE INFIRMIER
+ADD CONSTRAINT fk_inf
+FOREIGN KEY (NUM_INF) REFERENCES EMPLOYE(NUM_EMP);
+
+ALTER TABLE INFIRMIER
+ADD CONSTRAINT fk_serv
+FOREIGN KEY (CODE_SERVICE) REFERENCES SERVICE(CODE_SERVICE);
+
+ALTER TABLE HOSPITALISATION  
+ADD CONSTRAINT fk_pat
+FOREIGN KEY (NUM_PATIENT) REFERENCES PATIENT(NUM_PATIENT);
+
+ALTER TABLE HOSPITALISATION  
+ADD CONSTRAINT fk_hos
+FOREIGN KEY (CODE_SERVICE) REFERENCES SERVICE(CODE_SERVICE);
+
+ALTER TABLE HOSPITALISATION  
+ADD CONSTRAINT fk_hos2
+FOREIGN KEY (NUM_CHAMBRE) REFERENCES CHAMBRE(NUM_CHAMBRE);
+
+ALTER TABLE SOIGNE  
+ADD CONSTRAINT fk_soi1
+FOREIGN KEY (NUM_PATIENT) REFERENCES PATIENT(NUM_PATIENT);
+
+ALTER TABLE SOIGNE  
+ADD CONSTRAINT fk_soi2
+FOREIGN KEY (NUM_MED) REFERENCES MEDECIN(NUM_MED);
+
+/* 6 */
+ALTER TABLE HOSPITALISATION
+ADD Date_Host Date;
+
+/* 7 */			
+ALTER TABLE INFIRMIER
+MODIFY SALAIRE not null;
+
+ALTER TABLE PATIENT
+MODIFY MUTUELLE not null;
+
+/* 8 */
+ALTER TABLE PATIENT
+MODIFY PRENOM_PATIENT varchar(35);
+
+/* 9 */
+ALTER TABLE EMPLOYE
+DROP COLUMN TELE_EMP;
+
+DESC EMPLOYE;
+
+ALTER TABLE EMPLOYE
+ADD TELE_EMP varchar(30);
+
+/* 10 */
+
+ALTER TABLE PATIENT
+RENAME COLUMN ADRESSE_PATIENT TO adr_pat;
+
+DESC PATIENT;
+
+/* 11 */
+ALTER TABLE INFIRMIER
+ADD CONSTRAINT CHK_Sallaire CHECK (SALAIRE>=10000 AND SALAIRE<=30000);
+
+/* 12 */
+ALTER TABLE MEDCIN
+MODIFY SPECIALITE not null;
+
+/* ======= THIRD PART ======== */
+
