@@ -75,5 +75,18 @@ CREATE PROFILE Admin_profile LIMIT
 	PASSWORD_GRACE_TIME 5;
 	
 /* 14 */
-	
+ALTER USER AdminHopital PROFILE Admin_profile;
+
+/* 15 */
+CREATE ROLE GestionnairePatient;	
+
+GRANT SELECT ON PATIENT TO GestionnairePatient;
+GRANT SELECT ON HOSPITALISATION TO GestionnairePatient;
+GRANT SELECT ON SOIGNE TO GestionnairePatient;
+GRANT UPDATE ON HOSPITALISATION TO GestionnairePatient;
+
+/*16*/
+GRANT GestionnairePatient TO AdminHopital;
+
+SELECT * FROM oussama.HOSPITALISATION;
 		
