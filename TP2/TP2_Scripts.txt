@@ -89,4 +89,6 @@ GRANT UPDATE ON HOSPITALISATION TO GestionnairePatient;
 GRANT GestionnairePatient TO AdminHopital;
 
 SELECT * FROM oussama.HOSPITALISATION;
+
+/* test commit*/
 		
