@@ -1,0 +1,38 @@
+/* == By Amor Oussama == */
+/* == TP 2 == */
+/* 1 */
+CREATE USER AdminHopital IDENTIFIED BY oussama; 
+ALTER USER AdminHopital
+DEFAULT TABLESPACE HOPITAL_TBS
+TEMPORARY TABLESPACE HOPITAL_TempTBS;
+
+/* 2 */
+
+/* Le nouveau user n'as pas les privilèges */
+
+/* 3 */
+GRANT CREATE SESSION TO AdminHopital; 				
+
+/* 4 */
+GRANT CREATE TABLE TO AdminHopital; 
+GRANT CREATE USER TO AdminHopital; 
+
+/* 5 */
+SELECT * FROM oussama.EMPLOYE;
+/* il a pas le droit  */ 
+
+/* 6 */
+GRANT SELECT ON oussama.EMPLOYE TO AdminHopital;
+SELECT * FROM oussama.EMPLOYE;
+
+/* 7 */
+/* il faut faire une update mais les privélèges sont insufisants */
+
+/* 8 */
+GRANT UPDATE ON oussama.EMPLOYE TO AdminHopital;
+
+UPDATE oussama.employe 
+SET ADRESSE_EMP = '152,rue hassiba ben bouali 2eme etage'
+WHERE NOM_EMP = 'ABDELMOUMEN'
+AND PRENOM_EMP = 'Nassima';
+		
