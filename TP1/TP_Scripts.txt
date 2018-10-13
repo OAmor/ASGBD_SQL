@@ -1,5 +1,5 @@
 /* == By Amor Oussama == */
-
+/* == TP 1 == */
 /*=========== First Part ========*/
 CREATE TABLESPACE HOPITAL_TBS DATAFILE 'E:\IL\tbs_hopital.dat'  SIZE 100M  AUTOEXTEND ON   ONLINE;
 
@@ -64,8 +64,8 @@ create table HOSPITALISATION  (
 	Constraint pk_hos Primary key(NUM_PATIENT)	
 );
 create table SOIGNE   (
-	NUM_PATIENT integer not null,
 	NUM_MED integer not null,
+	NUM_PATIENT integer not null,
 	Constraint pk_soigne Primary key(NUM_PATIENT,NUM_MED)	
 );
 
@@ -150,8 +150,8 @@ ALTER TABLE INFIRMIER
 ADD CONSTRAINT CHK_Sallaire CHECK (SALAIRE>=10000 AND SALAIRE<=30000);
 
 /* 12 */
-ALTER TABLE MEDCIN
-MODIFY SPECIALITE not null;
+ALTER TABLE MEDECIN
+ADD CONSTRAINT CHK_Specialite CHECK ( SPECIALITE IS NOT NULL);
 
 /* ======= THIRD PART ======== */
 
@@ -184,14 +184,19 @@ WHERE E.NUM_EMP IN (SELECT NUM_EMP
 
 /* 17 */
 
-/* Aucune idée */
+CREATE INDEX IX_Specialite
+ON MEDECIN(SPECIALITE)
+
+/* c'est un index secondaire , il ne porte pas sure la clé primaire 
+NB: oracle crée automatiquement un index primaire sur la clé primaire*/
 
 /* ======= FOURTH PART ======== */
 
 /* 18 */
 SELECT NOM_PATIENT,PRENOM_PATIENT
 FROM PATIENT
-WHERE MUTUELLE = 'MAAF';
+WHERE MUTUELLE = 'MAAF'
+ORDER BY PRENOM_EMP,NOM_EMP;
 
 /* 19 */
 
@@ -203,6 +208,11 @@ and h.num_patient = p.num_patient
 and p.mutuelle LIKE 'MN%';
 
 /* 20 */
+SELECT S.NUM_PATIENT,COUNT(S.NUM_MED) AS NB_MED,COUNT(DISTINCT SPECIALITE) AS NB_SPEC
+FROM SOIGNE S,MEDECIN M
+WHERE S.NUM_MED = M.NUM_MED
+GROUP BY S.NUM_MED
+HAVING COUNT(S.NUM_PATIENT)>3;
 
 /* 21 */
 SELECT CODE_SERVICE,AVG(SALAIRE)
