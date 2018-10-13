@@ -35,4 +35,9 @@ UPDATE oussama.employe
 SET ADRESSE_EMP = '152,rue hassiba ben bouali 2eme etage'
 WHERE NOM_EMP = 'ABDELMOUMEN'
 AND PRENOM_EMP = 'Nassima';
+
+/* 9 */
+
+CREATE INDEX EMPLOYNOM_IX
+ON oussama.EMPLOYE(NOM_EMP);
 		
