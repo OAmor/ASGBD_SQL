@@ -1,0 +1,15 @@
+/* == By Amor Oussama == */
+/* == TP 3 == */
+/* 1 */
+SELECT * FROM DICT;
+/* 2553 ligne */
+/* 2 */
+
+/* 3 */
+SELECT * FROM USER_USERS;
+/* user avec ACCOUNT_STATUS open */
+
+/* 4 */ 
+
+/* 5 */
+SELECT TABLE_NAME FROM USER_TABLES;
